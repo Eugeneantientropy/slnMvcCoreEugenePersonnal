@@ -1,0 +1,72 @@
+﻿@model IEnumerable<prjMvcCoreEugenePersonnal.Models.CProductWrap>
+
+@{
+    ViewData["Title"] = "List";
+}
+
+<h1>線上購物</h1>
+
+<p>
+    @Html.ActionLink("檢視購物車", "CartView")
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                序號
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StockQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateAdded)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductImagePath)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int count = 0;
+            foreach (var item in Model) {
+                count++;
+                <tr>
+            <td>
+                @count         
+            </td>
+            <td>
+            <p>
+                <img src="~/images/Product/@item.ProductImagePath" width="150" height="130">
+            </p>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StockQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateAdded)
+            </td>
+            <td>
+                        @Html.ActionLink("加入購物車", "AddToCart", new { id = item.ProductId }, new { @class = "btn btn-primary se-2" })
+                    </td>
+        </tr>
+}}
+    </tbody>
+</table>

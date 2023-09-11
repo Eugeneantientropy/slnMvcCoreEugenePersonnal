@@ -1,0 +1,75 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Eugene Bean</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/prjMvcCoreEugenePersonnal.styles.css" asp-append-version="true" />
+    <style>
+        body {
+            font-size: 1.2rem;
+            padding-bottom: 100px; /* Adjust this value based on your footer's height */
+        }
+   /*     header,footer{
+            background-color:beige;
+
+        }*/
+
+        .fs-4 {
+            font-size: 2rem;
+        }
+
+        .footer {
+            font-size: 1.2rem;
+            height: 100px; /* Adjust this value based on your preference */
+        }
+
+        main {
+            padding-bottom: 4rem; /* Space between main content and footer */
+        }
+    </style>
+</head>
+<body>
+    <header class="border-bottom">
+        <div class="d-flex flex-wrap justify-content-center py-3 mb-4">
+            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-4">Eugene Bean</span>
+            </a>
+
+            <ul class="nav nav-pills">
+                <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container py-3 my-4" style="height: 100%;">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li class="nav-item"><a href="#" class="nav-link px-2">首頁</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2">商品</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2">關於</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2">文章</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2">登入</a></li>
+            </ul>
+            <p class="text-center">© 2023 Eugene Company, Inc</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
