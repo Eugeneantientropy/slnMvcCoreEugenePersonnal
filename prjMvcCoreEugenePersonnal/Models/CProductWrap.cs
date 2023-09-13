@@ -26,6 +26,8 @@ namespace prjMvcCoreEugenePersonnal.Models
             set { _product.ProductName = value; }
         } 
 
+
+
         public string? Description
         {
             get { return _product.Description; }
@@ -55,7 +57,13 @@ namespace prjMvcCoreEugenePersonnal.Models
             get { return _product.ProductImagePath; }
             set { _product.ProductImagePath = value; }
         }
+        public string Classification
+        {
+            get { return _product.Classification; }
+            set { _product.Classification = value; }
+        }
         public IFormFile Photo { get; set; }
-         
+
+
     }
 }

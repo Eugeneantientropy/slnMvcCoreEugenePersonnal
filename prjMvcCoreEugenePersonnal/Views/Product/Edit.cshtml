@@ -38,6 +38,25 @@
                 <input asp-for="DateAdded" class="form-control" />
                 <span asp-validation-for="DateAdded" class="text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Classification" class="control-label"></label>
+                <select asp-for="Classification" class="form-control">
+                    <option value="亞洲 - Asia">
+                        亞洲 - Asia
+                    </option>
+                    <option value="非洲 - Africa">
+                        非洲 - Africa
+                    </option>
+                    <option value="美洲 - Americas">美洲 - Americas</option>
+                    <option value="台灣 - Taiwan">台灣 - Taiwan</option>
+                    <option value="衣索比亞 - Ethiopia">衣索比亞 - Ethiopia</option>
+                    <option value="哥倫比亞 - Colombia">哥倫比亞 - Colombia</option>
+                    <option value="特惠組合">特惠組合</option>
+                    <option value="周邊器材">周邊器材</option>
+                </select>
+                <span asp-validation-for="Classification" class="text-danger"></span>
+            </div>
+
             <div >
                 <label>商品照片</label>
                 <input type="file" name="photo" class="form-control" />

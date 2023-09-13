@@ -1,11 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using prjMvcCoreEugenePersonnal.Models;
+using prjMvcCoreEugenePersonnal.ViewModels;
 using System.Text.Json;
 
 namespace prjMvcCoreEugenePersonnal.Controllers
 {
     public class ShoppingController : SuperController
     {
+        EugenePowerContext db = new EugenePowerContext();
+        private IWebHostEnvironment _envior = null;
+
+        public ShoppingController(IWebHostEnvironment envior)
+        {
+            _envior = envior;
+        }
 
         public IActionResult CartView()
         {
@@ -20,7 +28,10 @@ namespace prjMvcCoreEugenePersonnal.Controllers
          }
         public IActionResult AddToCart(int? id)
         {
+            var data = db.Products.AsQueryable();
+
             ViewBag.ProductId = id;
+
             return View();
         }
         [HttpPost]
@@ -50,17 +61,44 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 
             return RedirectToAction("List");
         }
-        public IActionResult List() { 
-            EugenePowerContext db = new EugenePowerContext();  
-            var data = from p in db.Products select p;
+        public IActionResult List(string classification, string txtKeyword)
+        {
+            var data = db.Products.AsQueryable();
+
+            // Get all unique classifications
+            var allClassifications = db.Products.Select(p => p.Classification).Distinct().ToList();
+
+            if (!string.IsNullOrEmpty(classification))
+            {
+                data = data.Where(p => p.Classification == classification);
+            }
+
+            if (!string.IsNullOrEmpty(txtKeyword))
+            {
+                data = data.Where(p => p.ProductName.Contains(txtKeyword));
+            }
+
+            // Prepare the list of CProductWrap
             List<CProductWrap> list = new List<CProductWrap>();
-            foreach (var c in data) {
+            foreach (var c in data)
+            {
                 CProductWrap w = new CProductWrap();
                 w.product = c;
-                list.Add(w);   
+                list.Add(w);
             }
-            return View(list);
+
+            // Create a new instance of the ProductListViewModel
+            var viewModel = new ProductListViewModel
+            {
+                Products = list,
+                AllClassifications = allClassifications
+            };
+
+            return View(viewModel);
         }
+
+
+
 
     }
 }

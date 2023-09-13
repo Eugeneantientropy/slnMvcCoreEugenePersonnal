@@ -33,10 +33,12 @@ public partial class EugenePowerContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EugenePower;Integrated Security=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EugenePower;Integrated Security=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Chinese_Taiwan_Stroke_CS_AS");
+
         modelBuilder.Entity<Cart>(entity =>
         {
             entity.HasKey(e => e.CartId).HasName("PK__Carts__51BCD7979BFD9937");
@@ -74,7 +76,9 @@ public partial class EugenePowerContext : DbContext
             entity.HasKey(e => e.CommentId).HasName("PK__Comments__C3B4DFAA03B34069");
 
             entity.Property(e => e.CommentId).HasColumnName("CommentID");
-            entity.Property(e => e.Content).HasColumnType("text");
+            entity.Property(e => e.Content)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .HasColumnType("text");
             entity.Property(e => e.DateCommented)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -100,8 +104,11 @@ public partial class EugenePowerContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.OrderStatus)
                 .HasMaxLength(50)
-                .IsUnicode(false);
-            entity.Property(e => e.ShippingAddress).HasColumnType("text");
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.ShippingAddress)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .HasColumnType("text");
             entity.Property(e => e.TotalPrice).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
@@ -133,14 +140,17 @@ public partial class EugenePowerContext : DbContext
             entity.HasKey(e => e.PostId).HasName("PK__Posts__AA126038A8EFF183");
 
             entity.Property(e => e.PostId).HasColumnName("PostID");
-            entity.Property(e => e.Content).HasColumnType("text");
+            entity.Property(e => e.Content)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .HasColumnType("text");
             entity.Property(e => e.DatePosted)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.LastEdited).HasColumnType("datetime");
             entity.Property(e => e.Title)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.User).WithMany(p => p.Posts)
@@ -153,15 +163,21 @@ public partial class EugenePowerContext : DbContext
             entity.HasKey(e => e.ProductId).HasName("PK__Products__B40CC6ED8E5D18C6");
 
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.Classification).HasMaxLength(50);
             entity.Property(e => e.DateAdded)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.Description).HasColumnType("text");
+            entity.Property(e => e.Description)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS")
+                .HasColumnType("text");
             entity.Property(e => e.Price).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.ProductImagePath).HasMaxLength(150);
+            entity.Property(e => e.ProductImagePath)
+                .HasMaxLength(150)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.ProductName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -178,17 +194,21 @@ public partial class EugenePowerContext : DbContext
                 .HasColumnType("datetime");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.FullName)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.LastLogin).HasColumnType("datetime");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(512)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .UseCollation("SQL_Latin1_General_CP1_CI_AS");
         });
 
         OnModelCreatingPartial(modelBuilder);

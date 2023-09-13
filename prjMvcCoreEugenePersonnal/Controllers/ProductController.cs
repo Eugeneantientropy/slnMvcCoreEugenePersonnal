@@ -13,10 +13,11 @@ namespace prjMvcCoreEugenePersonnal.Controllers
         {
             _envior = p;
         }
-            public IActionResult List(CKeywordViewModel vm)
+        public IActionResult List(CKeywordViewModel vm)
         {
-            EugenePowerContext db = new EugenePowerContext();
+            //EugenePowerContext db = new EugenePowerContext();
             IEnumerable<Product> datas = null;
+
             if(string.IsNullOrEmpty(vm.txtKeyword))
                 datas = from p in db.Products
                            select p;
@@ -24,6 +25,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
                 datas = db.Products.Where(p => p.ProductName.Contains(vm.txtKeyword));   
             return View(datas);
         }
+
         public IActionResult Create()
         {
             return View();
@@ -47,6 +49,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
                 StockQuantity = pWP.StockQuantity,
                 DateAdded = pWP.DateAdded,
                 ProductImagePath = pWP.ProductImagePath,
+                Classification = pWP.Classification,    
 
             };
             db.Products.Add(p);
@@ -97,6 +100,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
                 p.StockQuantity = prod.StockQuantity;
                 p.Price = prod.Price;
                 p.DateAdded = prod.DateAdded;
+                p.Classification = prod.Classification;
                 p.ProductImagePath = prod.ProductImagePath;
                 
 
