@@ -3,63 +3,162 @@
 @{
     ViewData["Title"] = "CartView";
 }
+@using (Html.BeginForm("CartCheckout", "Shopping", FormMethod.Post))
+{
+    <div class="container mt-2">
+        <h1>購物車</h1>
 
-<h1>檢視購物車</h1>
 
-<p>
-    @Html.ActionLink("結帳購物車", "Create")
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                序
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].count)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model[0].小計)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@{
-            int itemNumber = 0;
-            decimal sum = 0;
-            decimal tax = 0;
-            decimal pay = 0;
-    foreach (var item in Model) {
-                itemNumber++;
-                sum += item.小計;
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.product.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.count)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.小計)
-            </td>
-            <td>
-                        @Html.ActionLink("改數量", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("取消", "Details", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
-            tax = sum * 0.05M;
-            pay = tax + sum;
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        編號
+                    </th>
+                    <th>
+                        商品名稱
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].count)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model[0].小計)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var count = 0;
+                    int itemNumber = 0;
+                    decimal sum = 0;
+                    decimal tax = 0;
+                    decimal pay = 0;
+                    foreach (var item in Model)
+                    {
+                        count++;
+                        itemNumber++;
+                        sum += item.小計;
+                        <tr>
+                            <td>
+                                @count
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.product.ProductName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.count)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.小計)
+                            </td>
+                            <td>
+                                @Html.ActionLink("改數量", "Edit", new { /* id=item.PrimaryKey */ }) |
+                                @Html.ActionLink("取消", "Delete", new { /* id=item.PrimaryKey */ })
+
+                            </td>
+                        </tr>
+                    }
+                    tax = sum * 0.05M;
+                    pay = tax + sum;
+                }
+            </tbody>
+        </table>
+        @{
+            var user = ViewBag.User as prjMvcCoreEugenePersonnal.Models.User; 
         }
-    </tbody>
-</table>
-<li>交易金額：@sum.ToString("###,###,##0")</li>
-<li>稅　　額：@tax.ToString("###,###,##0")</li>
-<li>應負金額：@pay.ToString("###,###,##0")</li>
+
+        @if (user != null)
+        {
+            <div class="mb-3">
+                <input type="checkbox" id="useUserInfo" name="useUserInfo" value="true" /> 匯入會員資料
+                <div id="userInfo">
+                    <div class="form-group">
+                        <label for="fullName">姓名:</label>
+                        <input type="text" id="fullName" name="FullName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">電話:</label>
+                        <input type="text" id="phone" name="Phone" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="address">地址:</label>
+                        <input type="text" id="address" name="Address" class="form-control" />
+                    </div>
+                </div>
+                <div id="customInfo" style="display:none;">
+                    <div class="form-group">
+                        <label for="customName">姓名:</label>
+                        <input type="text" id="customName" name="FullName" class="form-control" value="@user.FullName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customPhone">電話:</label>
+                        <input type="text" id="customPhone" name="Phone" class="form-control" value="@user.Phone" />
+                    </div>
+                    <div class="form-group">
+                        <label for="customAddress">地址:</label>
+                        <input type="text" id="customAddress" name="Address" class="form-control" value="@user.Address" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <strong>選擇付款方式:</strong><br />
+                    <input type="radio" id="bankTransfer" name="PaymentMethod" value="bankTransfer" />
+                    <label for="bankTransfer">匯款轉帳</label><br />
+                    <input type="radio" id="creditCard" name="PaymentMethod" value="creditCard" />
+                    <label for="creditCard">信用卡</label>
+                </div>
+            </div>
+        }
+
+
+
+
+        <script>
+            document.getElementById('useUserInfo').addEventListener('change', function () {
+                if (this.checked) {
+                    document.getElementById('userInfo').style.display = 'none';
+                    document.getElementById('customInfo').style.display = 'block';
+                    document.getElementById('address').value = document.getElementById('customAddress').value;
+                } else {
+                    document.getElementById('userInfo').style.display = 'block';
+                    document.getElementById('customInfo').style.display = 'none';
+                    document.getElementById('address').value = "";
+                }
+            });
+
+        </script>
+
+        <input type="hidden" name="TotalAmount" value="@sum" />
+        <input type="hidden" name="TaxAmount" value="@tax" />
+        <input type="hidden" name="PayableAmount" value="@pay" />
+        <input type="hidden" name="UserID" value="@user.UserId" />
+
+
+
+        <ul class="list-unstyled mb-0">
+            <li>交易金額：@sum.ToString("###,###,##0")</li>
+            <li>稅　　額：@tax.ToString("###,###,##0")</li>
+            <li>總金額：@pay.ToString("###,###,##0")</li>
+        </ul>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary ml-4"
+                    onclick="return confirm('確認要前往結帳嗎？');">
+                前往結帳
+            </button>
+        </div>
+    </div>
+
+}
+
+
+
+
+
+
+

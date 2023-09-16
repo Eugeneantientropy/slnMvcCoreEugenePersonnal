@@ -59,11 +59,13 @@
             </a>
 
             <ul class="nav nav-pills me-2">
-                <li class="nav-item"><a href=@Url.Action("Index","Home") class="nav-link active" aria-current="page">首頁</a></li>
+                <li class="nav-item"><a href=@Url.Action("Index","Home") class="nav-link">首頁</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">文章</a></li>
                 <li class="nav-item"><a href=@Url.Action("List","Shopping") class="nav-link">商品</a></li>
                 <li class="nav-item"><a href="#" class="nav-link">關於</a></li>
                 <li class="nav-item"><a href=@Url.Action("Create","User") class="nav-link">會員中心</a></li>
+                <li class="nav-item"><a href=@Url.Action("CartView","Shopping") class="nav-link">購物車</a></li>
+
             </ul>
         </div>
     </header>
@@ -74,7 +76,7 @@
     </div>
 
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <p class="col-md-4 mb-0 text-body-secondary">© 2023 Company, Inc</p>
+            <p class="col-md-4 mb-0 text-body-secondary">© 2023 Eugene Company, Inc</p>
 
             <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
                 <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
@@ -86,6 +88,8 @@
             <li class="nav-item"><a href=@Url.Action("List","Product") class="nav-link px-2 text-body-secondary">商品</a></li>
             <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">關於</a></li>
             <li class="nav-item"><a href=@Url.Action("Create","User") class="nav-link px-2 text-body-secondary">會員中心</a></li>
+            <li class="nav-item"><a href=@Url.Action("CartView","Shopping") class="nav-link px-2 text-body-secondary">購物車</a></li>
+
             </ul>
         </footer>
 

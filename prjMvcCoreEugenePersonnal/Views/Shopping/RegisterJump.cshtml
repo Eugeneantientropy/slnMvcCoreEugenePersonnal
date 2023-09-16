@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.EcpayId = TempData["EcpayId"] ?? string.Empty;
+}
+<style>
+    body, html {
+        height: 100%;
+    }
+
+    h1 {
+        font-size: 68px;
+    }
+
+    .project_container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+</style>
+<div class="project_container">
+
+
+    <div class="container">
+        <h1>自動跳轉結帳頁面,轉至綠界金流...</h1>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    var ecpayId = '@ViewBag.EcpayId';
+    console.log("EcpayId from ViewBag:", ecpayId);
+
+    setTimeout(function () {
+        if (ecpayId) {
+            $.post("/Shopping/RegisterJump", { id: ecpayId }, function (response) {
+                if (response.success) {
+                    window.location.href = '/Ecpay/index?id=' + ecpayId;
+                }
+            });
+        } else {
+            console.log("EcpayId is empty");
+        }
+    }, 1000);
+</script>

@@ -102,6 +102,9 @@ public partial class EugenePowerContext : DbContext
             entity.Property(e => e.DateOrdered)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.EcpayId)
+                .HasMaxLength(100)
+                .HasColumnName("EcpayID");
             entity.Property(e => e.OrderStatus)
                 .HasMaxLength(50)
                 .IsUnicode(false)
@@ -125,6 +128,7 @@ public partial class EugenePowerContext : DbContext
             entity.Property(e => e.OrderId).HasColumnName("OrderID");
             entity.Property(e => e.PriceAtPurchase).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.ProductId).HasColumnName("ProductID");
+            entity.Property(e => e.ProductName).HasMaxLength(100);
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
                 .HasForeignKey(d => d.OrderId)
@@ -189,6 +193,7 @@ public partial class EugenePowerContext : DbContext
             entity.HasIndex(e => e.Email, "UQ__Users__A9D1053485139E14").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.Address).HasMaxLength(300);
             entity.Property(e => e.DateRegistered)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -205,6 +210,7 @@ public partial class EugenePowerContext : DbContext
                 .HasMaxLength(512)
                 .IsUnicode(false)
                 .UseCollation("SQL_Latin1_General_CP1_CI_AS");
+            entity.Property(e => e.Phone).HasMaxLength(50);
             entity.Property(e => e.Username)
                 .HasMaxLength(255)
                 .IsUnicode(false)

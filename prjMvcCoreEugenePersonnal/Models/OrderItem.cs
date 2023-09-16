@@ -15,6 +15,8 @@ public partial class OrderItem
 
     public decimal PriceAtPurchase { get; set; }
 
+    public string? ProductName { get; set; }
+
     public virtual Order? Order { get; set; }
 
     public virtual Product? Product { get; set; }

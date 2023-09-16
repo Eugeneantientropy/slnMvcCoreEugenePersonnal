@@ -19,6 +19,10 @@ public partial class User
 
     public DateTime? LastLogin { get; set; }
 
+    public string? Address { get; set; }
+
+    public string? Phone { get; set; }
+
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

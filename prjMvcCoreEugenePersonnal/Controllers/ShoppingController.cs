@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using prjMvcCoreEugenePersonnal.Models;
 using prjMvcCoreEugenePersonnal.ViewModels;
 using System.Text.Json;
@@ -17,27 +18,50 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 
         public IActionResult CartView()
         {
-            if(!HttpContext.Session.Keys.Contains(CDictionary.SK_PURCAHSED_PRODUCTS_LIST))
+            if (!HttpContext.Session.Keys.Contains(CDictionary.SK_PURCAHSED_PRODUCTS_LIST))
                 return RedirectToAction("List");
+
             string json = HttpContext.Session.GetString(CDictionary.SK_PURCAHSED_PRODUCTS_LIST);
             List<CShoppingCartItem> cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json)
-                as List<CShoppingCartItem>;   
-            if(cart == null)
+                as List<CShoppingCartItem>;
+
+            string userJson = HttpContext.Session.GetString(CDictionary.SK_LOGINED_USER);
+            User user = null;
+            if (userJson != null)
+            {
+                user = JsonSerializer.Deserialize<User>(userJson);
+            }
+
+            if (cart == null)
                 return RedirectToAction("List");
+
+            ViewBag.User = user;
             return View(cart);
-         }
+        }
+
         public IActionResult AddToCart(int? id)
         {
-            var data = db.Products.AsQueryable();
+            if (id == null)
+            {
+                return RedirectToAction("List");
+            }
 
-            ViewBag.ProductId = id;
+            Product prod = db.Products.FirstOrDefault(t => t.ProductId == id);
+            if (prod == null)
+            {
+                return RedirectToAction("List");
+            }
 
+            ViewBag.Product = prod;
             return View();
         }
+
+
         [HttpPost]
         public IActionResult AddToCart(CAddToCartViewModel vm)
         {
-            EugenePowerContext db = new EugenePowerContext();
+          
+            
             Product prod = db.Products.FirstOrDefault(t => t.ProductId == vm.txtProductID);
             if (prod == null)
                 return RedirectToAction("List");
@@ -55,12 +79,83 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             item.productId = vm.txtProductID;
             item.count = vm.txtCount;
             item.product = prod;
+            item.productQTY = prod.StockQuantity;
+
             cart.Add(item);
             json = JsonSerializer.Serialize(cart);
             HttpContext.Session.SetString(CDictionary.SK_PURCAHSED_PRODUCTS_LIST, json);
 
             return RedirectToAction("List");
         }
+
+        public IActionResult CartCheckout(CShoppingCartItem vm)
+        {
+            var currentTime = DateTime.Now;//現在時間
+            var ecpayId = Guid.NewGuid().ToString().Replace("-", "").Substring(0, 20);//產生20碼專屬變數給ecpayId
+
+            Order o = new Order();
+
+            o.TotalPrice = (int)vm.TotalAmount;
+            o.UserId = vm.UserID;
+            o.DateOrdered = currentTime;
+            o.ShippingAddress = vm.Address;
+            o.OrderStatus = "未出貨";
+            o.EcpayId = ecpayId;
+
+            db.Orders.Add(o);
+            db.SaveChanges();
+
+            string json = HttpContext.Session.GetString(CDictionary.SK_PURCAHSED_PRODUCTS_LIST);
+
+            if(json != null)
+            {
+                List<CShoppingCartItem> cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json);
+                int orderId = o.OrderId;
+
+                foreach(var item in cart)
+                {
+                    int pID = item.productId;
+                    int price = (int)item.price;
+                    int qty = item.count;
+                    //放進OrderItem資料表
+                    OrderItem OI = new OrderItem(); 
+                    OI.OrderId = orderId;
+                    OI.ProductId = pID;
+                    OI.PriceAtPurchase = price;
+                    OI.Quantity = qty;
+
+                    db.OrderItems.Add(OI);
+
+                    //庫存減少
+                    var newStockItem = db.Products.FirstOrDefault(p=> p.ProductId == pID);  
+                    if(newStockItem != null)
+                    {
+                        newStockItem.StockQuantity = newStockItem.StockQuantity - qty;
+                    }
+                    db.SaveChanges();
+                    HttpContext.Session.Remove(CDictionary.SK_PURCAHSED_PRODUCTS_LIST);
+
+                }
+            }
+            TempData["EcpayId"] = ecpayId;
+            return RedirectToAction("RegisterJump", new { id = ecpayId });
+        }
+
+        public IActionResult RegisterJump()//結帳跳轉頁面
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult RegisterJump(string id)//接RegisterActivity的ecpayId
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return Json(new { success = false, message = "ID cannot be null or empty" });
+            }
+            TempData["EcpayId"] = id;
+            return Json(new { success = true });
+        }
+        //}
         public IActionResult List(string classification, string txtKeyword)
         {
             var data = db.Products.AsQueryable();
@@ -96,8 +191,6 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 
             return View(viewModel);
         }
-
-
 
 
     }

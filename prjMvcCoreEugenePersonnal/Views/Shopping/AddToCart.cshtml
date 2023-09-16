@@ -1,43 +1,71 @@
-﻿@model prjMvcCoreEugenePersonnal.ViewModels.ProductListViewModel
+﻿@model prjMvcCoreEugenePersonnal.Models.Product
 @{
     ViewBag.Title = "AddToCart";
 }
 
-<h2>加入購物車</h2>
+@{
+    var product = ViewBag.Product as prjMvcCoreEugenePersonnal.Models.Product;
+}
+
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    <div class="container">
-        <div class="form-horizontal">
-            <h4>輸入購買數量</h4>
-            <hr />
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-            <input type="hidden" name="txtProductID" value="@ViewBag.productId" />
-            <div>
-                <img src="~/images//Product/@Model.ProductImagePath"></img>
-            </div>
-            <div class="form-group">
-                數量
-                <div class="col-md-10">
-                    @Html.TextBox("txtCount", "1", new { htmlAttributes = new { @class = "form-control" } })
-                </div>
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-md-6 mb-4 d-flex justify-content-end">
+                @if (product != null)
+                {
+                    <img src="~/images/Product/@product.ProductImagePath" class="img-fluid mb-3" alt="@product.ProductName" style="width:70%">
+                }
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="購買" class="btn btn-primary mt-3 mb-3" />
+
+
+            <div class="col-md-6">
+                @if (product != null)
+                {
+                    <h2 class="mb-3">商品:@product.ProductName</h2>
+                    <p class="mb-3">價錢:@product.Price</p>
+                    <p class="mb-3">風味描述:@product.Description</p>
+                    <p class="mb-3">單位:半磅</p>
+
+                    <input type="hidden" name="txtProductID" value="@product.ProductId" />
+                }
+                else
+                {
+                    <p>Product not found</p>
+                }
+                
+                @Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })
+                <div class="form-group">
+                    <label for="txtCount" class="mb-2">購買數量</label>
+                    @if (product != null)
+                    {
+                        <select name="txtCount" class="form-control" style="width:60%;">
+                            @for (var i = 1; i <= product.StockQuantity; i++)
+                            {
+                                <option value="@i" sytle="width=700px">@i</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        @Html.TextBox("txtCount", "1", new { @class = "form-control", type = "number", min = "1" })
+                    }
+                </div>
+                <div class="form-group mt-3">
+                    <input type="submit" value="加入購物車" class="btn btn-primary" />
+                    <button type="button" onclick="window.location.href='@Url.Action("List","Shopping")'" class="btn btn-danger">取消</button>
                 </div>
             </div>
         </div>
     </div>
-
 }
 
-<div>
-    @Html.ActionLink("取消", "List")
-</div>
+
+
 <script src="~/Scripts/jquery-1.10.2.min.js"></script>
 <script src="~/Scripts/jquery.validate.min.js"></script>
 <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
