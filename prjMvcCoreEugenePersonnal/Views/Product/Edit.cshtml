@@ -4,74 +4,56 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>修改商品作業</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">修改商品作業</h2>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" name="ProductId" value="@Model.ProductId" />
+                        @foreach (var property in new[] { "ProductName", "Description", "Price", "StockQuantity", "DateAdded", "Classification" })
+                        {
+                            <div class="form-group">
+                                <label asp-for="@property" class="control-label"></label>
+                                <input asp-for="@property" class="form-control" />
+                                <span asp-validation-for="@property" class="text-danger"></span>
+                            </div>
+                        }
 
-<h4>輸入商品資訊</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" name="ProductId" value="@Model.ProductId" />
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StockQuantity" class="control-label"></label>
-                <input asp-for="StockQuantity" class="form-control" />
-                <span asp-validation-for="StockQuantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Classification" class="control-label"></label>
-                <select asp-for="Classification" class="form-control">
-                    <option value="亞洲 - Asia">
-                        亞洲 - Asia
-                    </option>
-                    <option value="非洲 - Africa">
-                        非洲 - Africa
-                    </option>
-                    <option value="美洲 - Americas">美洲 - Americas</option>
-                    <option value="台灣 - Taiwan">台灣 - Taiwan</option>
-                    <option value="衣索比亞 - Ethiopia">衣索比亞 - Ethiopia</option>
-                    <option value="哥倫比亞 - Colombia">哥倫比亞 - Colombia</option>
-                    <option value="特惠組合">特惠組合</option>
-                    <option value="周邊器材">周邊器材</option>
-                </select>
-                <span asp-validation-for="Classification" class="text-danger"></span>
-            </div>
+                        <div class="form-group">
+                            <label asp-for="Classification" class="control-label"></label>
+                            <select asp-for="Classification" class="form-control">
+                                @foreach (var option in new[] { "亞洲 - Asia", "非洲 - Africa", "美洲 - Americas", "台灣 - Taiwan", "衣索比亞 - Ethiopia", "哥倫比亞 - Colombia", "特惠組合", "周邊器材" })
+                                {
+                                    <option value="@option">@option</option>
+                                }
+                            </select>
+                            <span asp-validation-for="Classification" class="text-danger"></span>
+                        </div>
 
-            <div >
-                <label>商品照片</label>
-                <input type="file" name="photo" class="form-control" />
+                        <div class="form-group">
+                            <label>商品照片</label>
+                            <input type="file" name="photo" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" value="送出並修改" class="btn btn-primary w-100" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="submit" value="送出並修改" class="btn btn-primary" />
+            <div class="mt-3 text-center">
+                <a asp-action="List" class="btn btn-secondary">取消</a>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="List">取消</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

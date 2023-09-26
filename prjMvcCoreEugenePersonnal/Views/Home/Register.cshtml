@@ -1,0 +1,156 @@
+﻿@model prjMvcCoreEugenePersonnal.Models.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<style>
+    .user-box {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+        .user-box label {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            pointer-events: none;
+            transition: 0.5s;
+            color: #999;
+        }
+
+        .user-box input {
+            width: 100%;
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid #999;
+            outline: none;
+            color: #000;
+            font-size: 18px;
+        }
+
+            .user-box input:focus,
+            .user-box input:valid {
+                border-bottom: 2px solid #f36;
+            }
+
+                .user-box input:focus + label,
+                .user-box input:valid + label {
+                    top: -20px;
+                    left: 10px;
+                    color: #f36;
+                    font-size: 12px;
+                }
+
+    .fas {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        cursor: pointer;
+    }
+</style>
+
+<div class="row justify-content-center mt-3">
+
+    <h1 class="text-center">會員註冊</h1>
+    <h4 class="text-center">輸入註冊資料</h4>
+    <div class="col-md-4">
+        <form asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="user-box">
+                <input asp-for="Username" class="" required />
+                <label>帳號名稱</label>
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+
+            <div class="user-box">
+                <input asp-for="Email" class="" required />
+                <label>電子信箱</label>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="user-box">
+                <input asp-for="PasswordHash" id="UserPassword" required type="password" />
+                <label>輸入密碼</label>
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                <i id="checkEye1" class="fas fa-eye"></i>
+            </div>
+
+            <div class="user-box">
+                <input asp-for="PasswordHash" id="ConfirmPassword" required type="password" />
+                <label>確認密碼</label>
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                <i id="checkEye2" class="fas fa-eye"></i>
+            </div>
+
+            <div class="user-box">
+                <input asp-for="FullName" class="" required />
+                <label>會員姓名</label>
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group text-center">
+                <input type="submit" value="註冊會員" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-danger">取消註冊</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script>
+    function validate() {
+        var MemberPassword = document.getElementById("UserPassword");
+        var ConfirmPassword = document.getElementById("ConfirmPassword");
+        if (MemberPassword.value != "" && ConfirmPassword.value != "") {
+            if (MemberPassword.value == ConfirmPassword.value) {
+                return true;
+            }
+        }
+        alert("兩次密碼輸入不同,請重新輸入!");
+        return false;
+    }
+
+
+    var checkEye = document.getElementById("checkEye1");
+    var floatingPassword1 = document.getElementById("UserPassword");
+    checkEye.addEventListener("click", function (e) {
+        if (e.target.classList.contains('fa-eye')) {
+            //換class並換type
+            e.target.classList.remove('fa-eye');
+            e.target.classList.add('fa-eye-slash');
+            floatingPassword1.setAttribute('type', 'text')
+        } else {
+            floatingPassword1.setAttribute('type', 'password');
+            e.target.classList.remove('fa-eye-slash');
+            e.target.classList.add('fa-eye')
+        }
+    });
+
+    var checkEye = document.getElementById("checkEye2");
+    var floatingPassword2 = document.getElementById("ConfirmPassword");
+    checkEye.addEventListener("click", function (e) {
+        if (e.target.classList.contains('fa-eye')) {
+            //換class並換type
+            e.target.classList.remove('fa-eye');
+            e.target.classList.add('fa-eye-slash');
+            floatingPassword2.setAttribute('type', 'text')
+        } else {
+            floatingPassword2.setAttribute('type', 'password');
+            e.target.classList.remove('fa-eye-slash');
+            e.target.classList.add('fa-eye')
+        }
+    });
+
+</script>

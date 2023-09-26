@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "ForgetPwd";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+
+        .signin_page_content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .mb-3 {
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            width: 100%;
+        }
+
+        input.form-control {
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        #sendButton {
+            height: 40px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <form asp-controller="User" asp-action="ForgetPwd" method="post" id="forgetPwdForm">
+        <main>
+            <div class="signin_page_content">
+                <div class="login-box">
+                    <h2>忘記密碼</h2>
+                    <h6 class="text-light mb-3">請輸入您的電子信箱已發送新密碼</h6>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="userEmail" placeholder="請輸入您的電子信箱" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" id="sendButton">發送</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const sendButton = document.getElementById("sendButton");
+            const form = document.getElementById("forgetPwdForm");
+            const emailInput = document.querySelector("input[name='userEmail']");
+
+            sendButton.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                const email = emailInput.value;
+                if (confirm(`按確定後將您的新密碼寄到您的信箱: ${email} `)) {
+                    form.submit();
+                } else {
+                    // Handle cancel action if needed
+                }
+            });
+        });
+    </script>
+</body>
+</html>

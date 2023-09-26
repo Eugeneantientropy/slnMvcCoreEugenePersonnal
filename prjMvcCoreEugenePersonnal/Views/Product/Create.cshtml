@@ -4,73 +4,77 @@
     ViewData["Title"] = "新增商品頁面";
 }
 
-<h1>新增商品</h1>
+<div class="container mt-4">
+    <h1 class="text-center mb-4">新增商品</h1>
 
-<h4>輸入商品資訊</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" method="post" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StockQuantity" class="control-label"></label>
-                <input asp-for="StockQuantity" class="form-control" />
-                <span asp-validation-for="StockQuantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Classification" class="control-label"></label>
-                <select asp-for="Classification" class="form-control">
-                    <option value="亞洲 - Asia">
-                        亞洲 - Asia
-                    </option>
-                    <option value="非洲 - Africa">
-                        非洲 - Africa
-                    </option>
-                    <option value="美洲 - Americas">美洲 - Americas</option>
-                    <option value="台灣 - Taiwan">台灣 - Taiwan</option>
-                    <option value="衣索比亞 - Ethiopia">衣索比亞 - Ethiopia</option>
-                    <option value="哥倫比亞 - Colombia">哥倫比亞 - Colombia</option>
-                    <option value="特惠組合">特惠組合</option>
-                    <option value="周邊器材">周邊器材</option>
-                </select>
-                <span asp-validation-for="Classification" class="text-danger"></span>
-            </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group ">
-                <label for="Photo">商品照片上傳</label>
-                <input type="file" name="Photo" id="ProductImagePath" data-target="file-uploader" accept=".jpg,.jpeg,.png" required>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="送出並新增"/>
-            </div>
-        </form>
+                <div class="form-group">
+                    <label asp-for="ProductName" class="control-label">商品名稱</label>
+                    <input asp-for="ProductName" class="form-control" />
+                    <span asp-validation-for="ProductName" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label">商品描述</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label">價格</label>
+                    <input asp-for="Price" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="StockQuantity" class="control-label">庫存數量</label>
+                    <input asp-for="StockQuantity" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="StockQuantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="DateAdded" class="control-label">添加日期</label>
+                    <input asp-for="DateAdded" class="form-control" type="date" />
+                    <span asp-validation-for="DateAdded" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Classification" class="control-label">分類</label>
+                    <select asp-for="Classification" class="form-control">
+                        <option value="非洲 - Africa">非洲 - Africa</option>
+                        <option value="衣索比亞 - Ethiopia">衣索比亞 - Ethiopia</option>
+                        <option value="美洲 - Americas">美洲 - Americas</option>
+                        <option value="台灣 - Taiwan">台灣 - Taiwan</option>
+                        <option value="周邊器材">周邊器材</option>
+                        <option value="特惠組合">特惠組合</option>
+                    </select>
+                    <span asp-validation-for="Classification" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Photo">首頁照片上傳</label>
+                    <input type="file" name="Photo" id="ProductImagePath" class="form-control-file" data-target="file-uploader" accept=".jpg,.jpeg,.png" required>
+                </div>
+                <div class="form-group">
+                    <label asp-for="photos" class="control-label"></label>
+                    <input asp-for="photos" type="file" data-target="file-uploader" accept=".jpg,.jpeg,.png" class="form-control" multiple />
+                    <span asp-validation-for="photos" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary">送出並新增</button>
+                    <a asp-action="List" class="btn btn-secondary ml-2">取消</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="List">取消</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

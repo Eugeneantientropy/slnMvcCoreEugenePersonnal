@@ -4,24 +4,26 @@
     ViewData["Title"] = "List";
 }
 
-<div class="container">
-    @using (Html.BeginForm())
+<div class="container mt-3">
+    @using (Html.BeginForm("List", "Product", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 mb-3" }))
     {
-        @:關鍵字
-        @Html.TextBox("txtKeyWord")
-        <input type="submit" value="查詢" class="mt-2" />
+        <div class="input-group">
+            @Html.TextBox("txtKeyWord", null, new { @class = "form-control", @placeholder = "請輸入關鍵字" })
+            <div class="input-group-append">
+                <input type="submit" value="查詢" class="btn btn-primary" />
+            </div>
+        </div>
     }
-    <h1>商品一覽表</h1>
+    <h1 class="mb-3">商品一覽表</h1>
 
     <p>
-        <a asp-action="Create">新增商品</a>
+        <a asp-action="Create" class="btn btn-success">新增商品</a>
     </p>
-    <table class="table">
+
+    <table class="table table-bordered table-striped table-hover">
         <thead>
             <tr>
-                <th>
-                    序號
-                </th>
+                <th>  序號  </th>
                 <th>
                     @Html.DisplayNameFor(model => model.ProductName)
                 </th>
@@ -43,7 +45,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Classification)
                 </th>
-                <th></th>
+                <th>
+                    Function
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -53,41 +57,81 @@
                 {
                     count++;
                     <tr>
-                        <td>
-                            @count
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ProductName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Description)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Price)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.StockQuantity)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.DateAdded)
-                        </td>
+                        <td>@count</td>
+                        <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Price)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StockQuantity)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DateAdded)</td>
                         <td>
                             <img src="~/images/Product/@item.ProductImagePath" width="150" height="80">
                         </td>
+                        <td>@Html.DisplayFor(modelItem => item.Classification)</td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Classification)
-                        </td>
-
-                        <td>
-                            @Html.ActionLink("修改", "Edit", new { id=item.ProductId }) |
-                            @Html.ActionLink("刪除", "Delete","Product", new { id=item.ProductId }, new{onclick="return confirm('確定要刪除嗎?')"})
+                            @Html.ActionLink("修改", "Edit", new { id = item.ProductId }, new { @class = "btn btn-success btn-sm" })
+                            @Html.ActionLink("刪除", "Delete", "Product", new { id = item.ProductId }, new { @class = "btn btn-danger btn-sm", onclick = "return confirm('確定要刪除嗎?')" })
                         </td>
                     </tr>
                 }
             }
         </tbody>
     </table>
-
-
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('th').each(function (col) {
+            $(this).hover(
+                function () {
+                    $(this).addClass('focus');
+                },
+                function () {
+                    $(this).removeClass('focus');
+                }
+            );
+            $(this).click(function () {
+                if ($(this).is('.asc')) {
+                    $(this).removeClass('asc');
+                    $(this).addClass('desc selected');
+                    sortOrder = -1;
+                }
+                else {
+                    $(this).addClass('asc selected');
+                    $(this).removeClass('desc');
+                    sortOrder = 1;
+                }
+                $(this).siblings().removeClass('asc selected');
+                $(this).siblings().removeClass('desc selected');
+                var arrData = $('table').find('tbody >tr:has(td)').get();
+                arrData.sort(function (a, b) {
+                    var val1 = $(a).children('td').eq(col).text().toUpperCase();
+                    var val2 = $(b).children('td').eq(col).text().toUpperCase();
+                    if ($.isNumeric(val1) && $.isNumeric(val2))
+                        return sortOrder == 1 ? val1 - val2 : val2 - val1;
+                    else
+                        return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+                });
+                $.each(arrData, function (index, row) {
+                    $('tbody').append(row);
+                });
+            });
+        });
+    });
+</script>
+<style>
+    th, td {
+        cursor: pointer;
+        height: 50px; /* 添加固定高度 */
+        vertical-align: middle; /* 确保文本在垂直方向上居中 */
+        text-align: center; /* 水平居中文本 */
+    }
+
+    th.focus {
+        background-color: #f9f9f9;
+    }
+
+    th.selected {
+        background-color: #d9d9d9;
+    }
+</style>

@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\EugenePowerContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.10">
@@ -14,10 +19,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
+    <PackageReference Include="OpenAI" Version="1.7.2" />
+    <PackageReference Include="OpenAI.Net" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\images\Home\" />
+    <Folder Include="wwwroot\images\post\" />
+    <Folder Include="wwwroot\images\Product\Detail\" />
   </ItemGroup>
 
 </Project>

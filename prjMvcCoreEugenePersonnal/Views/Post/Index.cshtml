@@ -1,0 +1,201 @@
+﻿@using System.Text.RegularExpressions
+@using Microsoft.AspNetCore.Html
+@model IEnumerable<prjMvcCoreEugenePersonnal.Models.Post>
+@{
+    ViewData["Title"] = "最新消息";
+}
+
+
+<style>
+    .post-text-block {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+</style>
+<main id="newscss">
+    <div class="content-wrapper">
+        <section class="content-block">
+            <div class="container">
+                <div class="heading bottom-space text-center mt-3 mb-3">
+                    <h1>最新文章</h1>
+                </div>
+                <div class="row multiple-row news-grid">
+                    @foreach (var post in Model)
+                    {
+                        <div class="col-md-4">
+                            <div class="col-wrap border rounded p-3 mb-4">
+                                <div class="post-grid reverse-grid">
+                                    <div class="img-block post-img mb-3 d-flex justify-content-center align-items-center" style="height: 350px;">
+                                        <img src="~/images/post/@post.PostImageUrl" width="250" height="350" style="object-fit: cover;">
+                                    </div>
+                                    <div class="post-text-block bg-gray-light p-3 rounded">
+                                        <strong class="content-title mb-0">
+                                            <a href="@Url.Action("Post", "News", new { id = post.PostId })">@post.Title</a>
+                                        </strong>
+                                        <div class="full-text" style="display:none;">
+                                            @Html.Raw(post.Content)
+                                        </div>
+                                        <p class="truncate-text">
+                                            @(new HtmlString(post.Content.Length > 150 ? Regex.Replace(post.Content.Substring(0, 150), "<.*?>", string.Empty) + "..." : post.Content))
+                                        </p>
+                                        <div class="post-meta clearfix">
+                                            <div class="post-link-holder">
+                                                <a href="@Url.Action("PostDetail", "Post", new { id = post.PostId })">
+                                                    Read More <span class="fa fa-arrow-right">
+                                                        <span class="sr-only">&nbsp;</span>
+                                                    </span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
+<script>
+    var loadedCount = 6;
+    var batchSize = 6;
+    var isLoading = false;
+    var grid = document.querySelector('.news-grid');
+    var msnry = new Masonry(grid, {
+        itemSelector: '.col-md-4',
+        columnWidth: '.col-md-4',
+        percentPosition: true
+    });
+
+    function loadMore(callback) {
+        if (isLoading) {
+            return;
+        }
+        isLoading = true;
+        $.ajax({
+            url: '@Url.Action("LoadMore", "News")',
+            type: 'GET',
+            data: { loadedCount: loadedCount },
+            success: function (response) {
+                isLoading = false;
+                if (response.length > 0) {
+                    response.forEach(function (news) {
+                        var truncatedArticleText = news.newsArticle.length > 150 ? news.newsArticle.substring(0, 150) + "..." : news.newsArticle;
+                        var date = new Date(news.newsDate);
+                        var formattedDate = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+                        var newItemHtml = `
+                                    <div class="col-md-4">
+                                        <div class="col-wrap">
+                                            <div class="post-grid reverse-grid reverse-grid">
+                                                <div class="img-block post-img">
+                                                    <a href="${'@Url.Action("Post", "News", new { id = "PLACEHOLDER" })'.replace('PLACEHOLDER', news.newsId)}">
+                                                        <img src="${news.newsPhotoUrl}" alt="${news.newsTitle}">
+                                                    </a>
+                                                    <time class="post-date" datetime="${news.newsDate}">
+                                                        ${new Date(news.newsDate).toLocaleDateString('en-US', { day: '2-digit', month: 'short' })}
+                                                    </time>
+                                                </div>
+                                            </div>
+                                            <div class="post-text-block bg-gray-light">
+                                                <strong class="content-title mb-0">
+                                                    <a href="${'@Url.Action("Post", "News", new { id = "PLACEHOLDER" })'.replace('PLACEHOLDER', news.newsId)}">${news.newsTitle}</a>
+                                                </strong>
+                                                <div class="full-text" style="display:none;">
+                                                    ${news.newsArticle}
+                                                </div>
+                                                <p class="truncate-text">
+                                                    ${truncatedArticleText}
+                                                </p>
+                                                <div class="post-meta clearfix">
+                                                    <div class="post-link-holder">
+                                                        <a href="${'@Url.Action("Post", "News", new { id = "PLACEHOLDER" })'.replace('PLACEHOLDER', news.newsId)}">
+                                                            Read More <span class="fa fa-arrow-right">
+                                                                <span class="sr-only">&nbsp;</span>
+                                                            </span>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <div class="date-bottom-right">
+                                                    <time datetime="${news.newsDate}">
+                                                            ${formattedDate}
+                                                    </time>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>`;
+                        var newItem = $(newItemHtml).get(0);
+                        $('.news-grid').append(newItem);
+                        msnry.appended(newItem);
+                    });
+                    loadedCount += batchSize;
+                    setTimeout(function () {
+                        msnry.layout();
+                    }, 100);
+
+                    setTimeout(function () {
+                        msnry.layout();
+                    }, 300);
+
+                    setTimeout(function () {
+                        msnry.layout();
+                    }, 1000);
+
+                    setTimeout(function () {
+                        msnry.layout();
+                    }, 5000);
+                } else {
+                    $(window).off('scroll', onScroll);
+                }
+                if (typeof callback === 'function') {
+                    callback();
+                }
+            },
+            error: function (error) {
+                console.error('Error loading more items', error);
+                isLoading = false;
+            }
+        });
+    }
+
+
+    function onScroll() {
+        if ($(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+            loadMore();
+        }
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    }
+
+    $(document).ready(function () {
+        var scrollPosition = sessionStorage.getItem('scrollPosition');
+        console.log('Stored Scroll Position: ', scrollPosition);
+        if (scrollPosition) {
+            loadUntilScrollPosition(parseInt(scrollPosition));
+        } else {
+            $(window).on('scroll', onScroll);
+        }
+    });
+
+    function loadUntilScrollPosition(scrollPosition) {
+        if ($(document).height() < scrollPosition) {
+            loadMore(function () {
+                loadUntilScrollPosition(scrollPosition);
+            });
+        } else {
+            window.scrollTo(0, scrollPosition);
+            $(window).on('scroll', onScroll);
+        }
+    }
+
+    window.onbeforeunload = function () {
+        console.log('onbeforeunload event triggered');
+        console.log('Scroll Position: ', window.scrollY);
+        sessionStorage.setItem('scrollPosition', window.scrollY);
+    };
+</script>

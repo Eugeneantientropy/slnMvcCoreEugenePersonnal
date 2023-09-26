@@ -9,13 +9,13 @@ public partial class Order
 
     public int? UserId { get; set; }
 
-    public int TotalPrice { get; set; }
+    public decimal TotalPrice { get; set; }
 
     public DateTime? DateOrdered { get; set; }
 
-    public string? ShippingAddress { get; set; }
+    public string ShippingAddress { get; set; } = null!;
 
-    public string? OrderStatus { get; set; } = null!;
+    public string OrderStatus { get; set; } = null!;
 
     public string? EcpayId { get; set; }
 

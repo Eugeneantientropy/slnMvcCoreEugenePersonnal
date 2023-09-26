@@ -6,7 +6,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 {
     public class StoreController : SuperController
     {
-        EugenePowerContext db =  new EugenePowerContext();
+        EugenePower0916Context db =  new EugenePower0916Context();
         private IWebHostEnvironment _envior = null;
 
         public StoreController(IWebHostEnvironment envior)

@@ -8,7 +8,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 {
     public class ShoppingController : SuperController
     {
-        EugenePowerContext db = new EugenePowerContext();
+        EugenePower0916Context db = new EugenePower0916Context();
         private IWebHostEnvironment _envior = null;
 
         public ShoppingController(IWebHostEnvironment envior)
@@ -19,7 +19,11 @@ namespace prjMvcCoreEugenePersonnal.Controllers
         public IActionResult CartView()
         {
             if (!HttpContext.Session.Keys.Contains(CDictionary.SK_PURCAHSED_PRODUCTS_LIST))
+            {
+                CAlertMessage resultb = new CAlertMessage(CDictionary.Warning, "尚無商品在購物車");
+                TempData["message"] = JsonSerializer.Serialize<CAlertMessage>(resultb);
                 return RedirectToAction("List");
+            }
 
             string json = HttpContext.Session.GetString(CDictionary.SK_PURCAHSED_PRODUCTS_LIST);
             List<CShoppingCartItem> cart = JsonSerializer.Deserialize<List<CShoppingCartItem>>(json)
@@ -41,6 +45,8 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 
         public IActionResult AddToCart(int? id)
         {
+            List<ProductPhoto> prodimgList = db.ProductPhotos.Where(t => t.ProductId == id).ToList();
+            ViewBag.ProdImgList = prodimgList;
             if (id == null)
             {
                 return RedirectToAction("List");
@@ -51,7 +57,6 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             {
                 return RedirectToAction("List");
             }
-
             ViewBag.Product = prod;
             return View();
         }
@@ -60,8 +65,8 @@ namespace prjMvcCoreEugenePersonnal.Controllers
         [HttpPost]
         public IActionResult AddToCart(CAddToCartViewModel vm)
         {
-          
-            
+            // 將圖片列表添加到 ViewBag
+
             Product prod = db.Products.FirstOrDefault(t => t.ProductId == vm.txtProductID);
             if (prod == null)
                 return RedirectToAction("List");

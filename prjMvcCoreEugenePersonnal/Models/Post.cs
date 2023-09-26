@@ -17,6 +17,8 @@ public partial class Post
 
     public DateTime? LastEdited { get; set; }
 
+    public string? PostImageUrl { get; set; }
+
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual User? User { get; set; }
