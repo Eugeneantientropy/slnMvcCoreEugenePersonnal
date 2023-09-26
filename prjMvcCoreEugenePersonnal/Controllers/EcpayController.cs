@@ -16,9 +16,9 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 {
     public class EcpayController : Controller
     {
-        private readonly EugenePowerContext _context;
+        private readonly EugenePower0916Context _context;
         private readonly IMemoryCache _memoryCache;
-        public EcpayController(EugenePowerContext context, IMemoryCache memoryCache)
+        public EcpayController(EugenePower0916Context context, IMemoryCache memoryCache)
         {
             _context = context;
             _memoryCache = memoryCache;
@@ -34,10 +34,10 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             string orderProducts = "";
 
             //放本站網址,訂單編號,價錢,商品名稱
-            var website = $"https://c22c-140-116-180-210.ngrok-free.app";
+            var website = $"https://c528-140-116-180-210.ngrok-free.app";
             //var website = $"https://localhost:7079";
             var orderId = id;
-            var orderPrice = order.TotalPrice;
+            var orderPrice = (int)order.TotalPrice;
             var orderItems = _context.OrderItems
                                  .Include(oi => oi.Product) // Assuming the Product navigation property is set up correctly
                                  .Where(oi => oi.OrderId == order.OrderId)
@@ -74,7 +74,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
         [HttpPost]
         public IActionResult PayInfo(string id, IFormCollection data)
         {
-            EugenePowerContext db = new EugenePowerContext();
+            EugenePower0916Context db = new EugenePower0916Context();
             var req = HttpContext.Request.Form.ToDictionary(x => x.Key, x => x.Value.ToString());
 
             string temp = data["MerchantTradeNo"]; //寫在LINQ會出錯
@@ -132,7 +132,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             {
                 data.Add(key, id[key]);
             }
-            EugenePowerContext db = new EugenePowerContext();
+            EugenePower0916Context db = new EugenePower0916Context();
             string temp = id["MerchantTradeNo"]; //寫在LINQ會出錯
             var ecpayOrder = db.Orders.Where(m => m.EcpayId == temp).FirstOrDefault();
 

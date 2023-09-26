@@ -1,149 +1,79 @@
 ﻿@model prjMvcCoreEugenePersonnal.ViewModels.ProductListViewModel
 
 
+<style>
+    .menu-link {
+        font-size: 110%; /* Increase font size */
+        transition: all 0.3s;
+    }
+
+        .menu-link:hover {
+            color: #007bff; /* Change color on hover */
+            box-shadow: 3px 3px 5px #888888;
+        }
+</style>
 
 @{
     ViewData["Title"] = "List";
 }
 
-<div class="container mt-3">
-@*    <p>
-        @Html.ActionLink("檢視購物車", "CartView")
-    </p>*@
-    <div id="carouselExampleFade" class="carousel slide carousel-fade">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="/images/Product/4c58bc65-b45c-4640-b5dc-c944c602141e.jpg" class="d-block w-100" height="500" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="/images/Product/806f5e3d-6669-45af-a6a0-79dfbdebe96e.jpg" class="d-block w-100" height="500" alt="...">
-            </div>
-            <div class="carousel-item">
-                <img src="/images/Product/3d4db8ca-5ffb-4032-8ad6-a611f3869867.jpg" class="d-block w-100" height="500" alt="...">
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-    <div class="nav nav1 justify-content-center" style="background-color:white; ">
-        @{
-            <text>
-                @Html.ActionLink("全部商品", "List", "Shopping", new { classification = (string)null }, new { @class = "nav-link me-2" })
-            </text>
-            foreach (var classification in Model.AllClassifications)
+<div class="row ms-5" style="margin-left: 0px;">
+    <div class="col-md-2 p-2 bg-white m-0" style="position: fixed; top: 100px; bottom: 350px; overflow-y: auto; transition: all 0.3s; margin-left: -100px;">
+        <ul class="list-unstyled ps-0">
+            <li class="mb-1">
+                @Html.ActionLink("全部商品", "List", "Shopping", new { classification = (string)null }, new { @class = "menu-link link-dark rounded text-decoration-none" })
+            </li>
+            @foreach (var classification in Model.AllClassifications)
             {
-                <text>
-                    @Html.ActionLink(classification, "List", "Shopping", new { classification = classification }, new { @class = "nav-link me-2" })
-                </text>
+                <li class="mb-1">
+                    @Html.ActionLink(classification, "List", "Shopping", new { classification = classification }, new { @class = "menu-link link-dark rounded text-decoration-none" })
+                </li>
             }
-        }
+        </ul>
     </div>
+</div>
 
-    <div class="album py-5 bg-body-tertiary">
-        <div class="container">
+<div class="container mt-3" style="margin-left: 120px;">
 
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 card1" height="400">
-                @{
 
-                    foreach (var item in Model.Products)
-                    {
-                        <div class="col">
-                            <div class="card shadow-sm">
-                                <img src="~/images/Product/@item.ProductImagePath" class="bd-placeholder-img card-img-top" width="100%" height="225">
-                                <div class="card-body">
-                                    <h5 class="card-text">
-                                        @Html.DisplayFor(modelItem => item.ProductName)
-                                    </h5>
-                                    <p class="card-text">
-                                        @Html.DisplayFor(modelItem => item.Description)
-                                    </p>
-                                    <p class="card-text">
-                                        @Html.DisplayFor(modelItem => item.Price)
-                                    </p>
-                                    <p class="card-text">
-                                        @Html.DisplayFor(modelItem => item.Classification)
-                                    </p>
-                                    
+        <div class="col-md-9 ms-auto p-0" style="margin-left: -200px;">
 
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="btn-group">
-                                            @Html.ActionLink("加入購物車", "AddToCart", new { id = item.ProductId }, new { @class = "btn btn-primary se-2" })
+            <div class="album py-5 bg-body-tertiary">
+                <div class="container">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-4 card1" height="400">
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="col">
+                                <div class="card shadow-sm">
+                                    <img src="~/images/Product/@item.ProductImagePath" class="bd-placeholder-img card-img-top" width="100%" height="225">
+                                    <div class="card-body">
+                                        <h5 class="card-text">
+                                            @Html.DisplayFor(modelItem => item.ProductName)
+                                        </h5>
+                                        <p class="card-text">
+                                            @Html.DisplayFor(modelItem => item.Description)
+                                        </p>
+                                        <p class="card-text">
+                                            @Html.DisplayFor(modelItem => item.Price)
+                                        </p>
+                                        <p class="card-text">
+                                            @Html.DisplayFor(modelItem => item.Classification)
+                                        </p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                @Html.ActionLink("加入購物車", "AddToCart", new { id = item.ProductId }, new { @class = "btn btn-primary se-2" })
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    }
-                }
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-@*<table class="table">
-    <thead>
-        <tr>
-            <th>
-                序號
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StockQuantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateAdded)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductImagePath)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int count = 0;
-            foreach (var item in Model) {
-                count++;
-                <tr>
-            <td>
-                @count
-            </td>
-            <td>
-            <p>
-                <img src="~/images/Product/@item.ProductImagePath" width="150" height="130">
-            </p>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StockQuantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateAdded)
-            </td>
-            <td>
-                        @Html.ActionLink("加入購物車", "AddToCart", new { id = item.ProductId }, new { @class = "btn btn-primary se-2" })
-                    </td>
-        </tr>
-}}
-    </tbody>
-</table>*@
+
+

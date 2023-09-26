@@ -1,0 +1,42 @@
+﻿@model List<ChatGPTMsg>
+
+<div>
+    <h1>OpenAI Chat</h1>
+    <div>
+        <ul>
+            @foreach (var message in Model)
+            {
+                <li>@message.Role: @message.Content</li>
+            }
+        </ul>
+    </div>
+    <form id="chatForm">
+        <input type="text" id="userInput" name="userInput" placeholder="Enter your message">
+        <button type="submit">Send</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#chatForm").submit(function (e) {
+            e.preventDefault();
+            var userInput = $("#userInput").val();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("CreateEdit")",
+                data: { userInput: userInput },
+                success: function (response) {
+                    $("#userInput").val("");
+                    $(".chat ul").append("<li>User: " + userInput + "</li>");
+                    $(".chat ul").append("<li>AI: " + response + "</li>");
+                    // Scroll to the bottom of the chat
+                    $(".chat").scrollTop($(".chat")[0].scrollHeight);
+                },
+                error: function (error) {
+                    console.log("Error:", error);
+                }
+            });
+        });
+    });
+</script>

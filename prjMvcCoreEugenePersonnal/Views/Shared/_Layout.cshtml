@@ -3,10 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Eugene Bean</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prjMvcCoreEugenePersonnal.styles.css" asp-append-version="true" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <link rel="icon" href="/images/Icon.jpg" type="image/x-icon"/>
+
+    <title >Flash Bean</title>
+
     <style>
         html, body {
             height: 100%;
@@ -17,22 +25,17 @@
             display: flex;
             flex-direction: column;
             font-size: 1.2rem;
-            padding-bottom: 100px; /* Adjust this value based on your footer's height */
+            padding-bottom: 100px;
+            color: black;
         }
 
         main {
             flex: 1 0 auto;
+            padding-bottom: 4rem;
         }
 
-        header,footer{
-            color:white;
-            background-color:white;
-
-        }
-
-        .custom-class {
-            color: white;
-            background-color: black;
+        header, footer {
+            background-color: white;
         }
 
         .fs-4 {
@@ -41,57 +44,134 @@
 
         .footer {
             font-size: 1.2rem;
-            height: 100px; /* Adjust this value based on your preference */
+            height: 100px;
             flex-shrink: 0;
         }
 
-        main {
-            padding-bottom: 4rem; /* Space between main content and footer */
+        .nav-link {
+            color: black !important;
         }
+
+            .nav-link:hover {
+                color: gray !important; /* Change the color when the link is hovered */
+            }
+
     </style>
+
 </head>
 <body class="pb-3 ps-0 pe-0 m-0 p-0">
     <header class="border-bottom" >
         <div class=" d-flex flex-wrap justify-content-center py-3 mb-1">
-            <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                <span class="fs-4">Eugene Bean</span>
-            </a>
+<a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none" style="color: black;">
+    <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+                <span class="fs-4"><i class="fa-solid fa-bolt-lightning"></i> Flash Bean</span>
+</a>
 
             <ul class="nav nav-pills me-2">
                 <li class="nav-item"><a href=@Url.Action("Index","Home") class="nav-link">首頁</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">文章</a></li>
-                <li class="nav-item"><a href=@Url.Action("List","Shopping") class="nav-link">商品</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">關於</a></li>
-                <li class="nav-item"><a href=@Url.Action("Create","User") class="nav-link">會員中心</a></li>
-                <li class="nav-item"><a href=@Url.Action("CartView","Shopping") class="nav-link">購物車</a></li>
+                <li class="nav-item"><a href=@Url.Action("Index","Post") class="nav-link">文章</a></li>
+                <li class="nav-item"><a href=@Url.Action("List","Shopping") class="nav-link">商城</a></li>
+                <li class="nav-item"><a href="@Url.Action("About","Home")" class="nav-link">關於</a></li>
+
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        會員中心
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        @if (CLogginUsercs.LoggedUser != "")
+                        {
+                            if(CLogginUsercs.LoggedUser == "employee")
+                            {
+                                <li><a class="dropdown-item" href=@Url.Action("Create", "Post")>文章管理</a></li>
+                                <li><a class="dropdown-item" href=@Url.Action("List", "Product")>商品管理</a></li>
+                                <li><a class="dropdown-item" href=@Url.Action("List", "Order")>訂單管理</a></li>
+                                <li><a class="dropdown-item" href=@Url.Action("logout", "Home")>管理員登出</a></li>
+                                <li><a class="dropdown-item" href=@Url.Action("UserInfoEdit", "User", new { id = CLogginUsercs.LoggenUserId})>後臺管理</a></li>
+                            }
+                            else
+                            {
+                                <li><a class="dropdown-item" href=@Url.Action("logout", "Home")>登出</a></li>
+                                <li><a class="dropdown-item" href=@Url.Action("UserInfoEdit", "Home", new { id = CLogginUsercs.LoggenUserId})>會員資料</a></li>
+                            }
+  
+                        }
+                        else
+                        {
+                            <li><a class="dropdown-item" href=@Url.Action("Login", "Home")>登入</a></li>
+                            <li><a class="dropdown-item" href=@Url.Action("Register", "Home")>註冊</a></li>
+                        }
+                    </ul>
+                </li>
+
+                <li class="nav-item">
+                    <a href=@Url.Action("CartView", "Shopping") class="nav-link position-relative" style="font-size: 120%; margin-right: 10px;">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        @{
+                            string json = Context.Session.GetString(CDictionary.SK_PURCAHSED_PRODUCTS_LIST);
+                            if (!string.IsNullOrEmpty(json))
+                            {
+                                int count = json.Count(c => c == '}');
+                                count -= 1;
+                                <span class="badge rounded-circle bg-danger position-absolute top-0 end-0 d-flex align-items-center justify-content-center" style="width:20px; height:20px; line-height:20px;">@count</span>
+                            }
+                        }
+                    </a>
+                </li>
+
+
 
             </ul>
         </div>
     </header>
+    
+
     <div class="me-0 ms-0">
+
         <main role="main" class="pb-3 ps-0 pe-0 m-0 p-0">
+            <partial name="./_AlertPartial.cshtml">
+
             @RenderBody()
         </main>
     </div>
 
-        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <p class="col-md-4 mb-0 text-body-secondary">© 2023 Eugene Company, Inc</p>
+    <footer class="d-flex flex-wrap justify-content-center align-items-center py-3 my-4 border-top px-4 text-center">
 
-            <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-            </a>
+        <div class="project_copyright text-center mb-0 ">
+            <img src="~/images/Icon.jpg" alt="Company Icon" width="3%" height="auto" class="mb-3" />
+            <p>© 2023 Eugene Company, All rights reserved.</p>
+            <p>
+                本網頁僅做履歷作品展示之用，如有侵權敬請來信告知
+                <a href="mailto:Eugeneantientropy@gmail.com">Eugeneantientropy@gmail.com</a>，
+                我們將盡速移除相關內容。
+            </p>
+            <p>本網頁所載的所有資料、商標、標誌、圖像、短片、聲音檔案、連結及其他資料等，僅供參考之用。</p>
+        </div>
 
-            <ul class="nav col-md-4 justify-content-end">
-            <li class="nav-item"><a href=@Url.Action("Index","Home") class="nav-link px-2 text-body-secondary">首頁</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">文章</a></li>
-            <li class="nav-item"><a href=@Url.Action("List","Product") class="nav-link px-2 text-body-secondary">商品</a></li>
-            <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">關於</a></li>
-            <li class="nav-item"><a href=@Url.Action("Create","User") class="nav-link px-2 text-body-secondary">會員中心</a></li>
-            <li class="nav-item"><a href=@Url.Action("CartView","Shopping") class="nav-link px-2 text-body-secondary">購物車</a></li>
+        <hr class="w-100">
 
+        <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+        </a>
+
+        <div style="display: flex; justify-content: center; width: 100%; " class="mt-0">
+            <ul class="nav justify-content-center text-center mt-0" style="margin-top:-100px;">
+                <li class="nav-item"><a href="@Url.Action("Index","Home")" class="nav-link px-2 text-body-secondary">首頁</a></li>
+                <li class="nav-item"><a href="@Url.Action("Index","Post")" class="nav-link px-2 text-body-secondary">文章</a></li>
+                <li class="nav-item"><a href="@Url.Action("List","Product")" class="nav-link px-2 text-body-secondary">商城</a></li>
+                <li class="nav-item"><a href="@Url.Action("About","Home")" class="nav-link px-2 text-body-secondary">關於</a></li>
+                <li class="nav-item"><a href="@Url.Action("Create","User")" class="nav-link px-2 text-body-secondary">會員中心</a></li>
+                <li class="nav-item"><a href="@Url.Action("CartView","Shopping")" class="nav-link px-2 text-body-secondary">購物車</a></li>
             </ul>
-        </footer>
+        </div>
+
+
+
+    </footer>
+
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

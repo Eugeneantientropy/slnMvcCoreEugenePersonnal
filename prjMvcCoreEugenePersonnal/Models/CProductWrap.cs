@@ -62,6 +62,7 @@ namespace prjMvcCoreEugenePersonnal.Models
             get { return _product.Classification; }
             set { _product.Classification = value; }
         }
+        public List<IFormFile> photos { get; set; }
         public IFormFile Photo { get; set; }
 
 

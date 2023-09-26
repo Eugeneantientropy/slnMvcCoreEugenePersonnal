@@ -1,0 +1,103 @@
+﻿@model prjMvcCoreEugenePersonnal.ViewModels.CPostsViewModel
+@{
+    ViewData["Title"] = Model.Post.Title;
+}
+<style>
+    #fb_share {
+        background-color: black; /* Facebook 藍色 */
+        color: #ffffff; /* 文字顏色白色 */
+        border: none; /* 無邊框 */
+        padding: 10px 20px; /* 上下間距10px，左右間距20px */
+        font-size: 16px; /* 字體大小16px */
+        cursor: pointer; /* 滑鼠指針為手指樣式 */
+        border-radius: 5px; /* 圓角 */
+        text-decoration: none; /* 無底線 */
+    }
+
+        #fb_share:hover {
+            background-color: #324c87; /* 滑鼠移上時的背景顏色 */
+        }
+</style>
+
+<main id="postcss">
+    <div class="content-wrapper">
+        <section class="content-block">
+            <div class="container">
+                <div class="row mt-5">
+                    <div class="col-lg-12 less-wide">
+                        <div class="blog-holder">
+                            <article class="blog-article">
+                                <div class="blog-title text-center pb-3">
+                                    <h1>@Model.Post.Title</h1>
+                                </div>
+                                <div id="fb_share" class="fa-brands fa-square-facebook" data-href="@ViewBag.UrlToShare" data-layout="" data-size="">
+                                    <a href="javascript:void(0);" onclick="openFacebookShareWindow('@ViewBag.UrlToShare')" class="fb-xfbml-parse-ignore" style="color:white">分享</a>
+                                </div>
+
+                                <div class="blog-desc pt-3 text-center">
+                                    <div class="blog-img">
+                                        <div class="image-wrap">
+                                            <figure class="">
+                                                <img src="~/images/post/@Model.Post.PostImageUrl" alt="@Model.Post.Title Image" style="max-width: 50%; height: auto;">
+                                            </figure>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        @Html.Raw(Model.Post.Content)
+                                    </p>
+                                </div>
+                                <hr class="post-separator">
+
+                                <div class="navigation d-flex justify-content-between mt-4">
+                                    @if (Model.NextPost != null)
+                                    {
+                                        <div class="prev navigation-item">
+                                            <a href="@Url.Action("PostDetail", "Post", new { id = Model.NextPost.PostId })">
+                                                <span class="navigation-label navigation-label-prev">上一篇</span>
+                                                <div class="navigation-content">
+                                                    <img src="~/images/post/@Model.NextPost.PostImageUrl" height="200" width="150" alt="@Model.NextPost.Title Image">
+                                                    <div class="navigation-title text-center">
+                                                        @Model.NextPost.Title
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="prev-placeholder" style="flex-grow: 1;"></div>
+                                    }
+
+                                    @if (Model.PrePost != null)
+                                    {
+                                        <div class="next navigation-item">
+                                            <a href="@Url.Action("PostDetail", "Post", new { id = Model.PrePost.PostId })">
+                                                <span class="navigation-label navigation-label-next">下一篇</span>
+                                                <div class="navigation-content navigation-content-next">
+                                                    <img src="~/images/post/@Model.PrePost.PostImageUrl" height="200" width="150" alt="@Model.PrePost.Title Image">
+                                                    <div class="navigation-title text-center">
+                                                     @Model.PrePost.Title
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="text-center mt-4">
+                                    <a href="@Url.Action("Index", "Post")" class="btn btn-danger">回文章列表</a>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<script>
+    function openFacebookShareWindow(url) {
+        var encodedUrl = encodeURIComponent(url);
+        window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodedUrl, 'facebookshare', 'width=600,height=400');
+    }
+</script>

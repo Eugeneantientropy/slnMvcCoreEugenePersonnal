@@ -7,43 +7,79 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 80vh;
-        width: 30vw;
+        height: 60vh;
+        width: 25vw;
         text-align: center;
         border: 2px solid #000;
-        padding: 10px;
+        padding: 20px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-        padding: 0px 10px;
+        background-color: #f9f9f9;
+        border-radius: 15px;
+        transition: transform 0.3s;
     }
 
-    /*        .container div {
-                margin-bottom: 20px; */
+    .container:hover {
+        transform: scale(1.01);
+    }
 
     h2 {
         display: flex;
         font-size: 60px;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 20px;
+        color: #010B48;
     }
 
-        h2 .fa-solid {
-            color: green;
-            margin-right: 10px;
-        }
+    h2 .fa-solid {
+        margin-right: 10px;
+    }
 
     label {
         font-weight: bold;
+        margin-right: 5px;
     }
 
     .btn {
         width: 200px;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 18px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .btn:hover {
+            background-color: #D0D8DB;
+        color: #fff;
+    }
+
+    .info-div {
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-div label {
+        display: inline-block;
+        min-width: 100px;
+    }
+
+    .note {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-top: 20px;
+    }
+
+    .note p {
+        margin: 0;
     }
 </style>
 
 <div>
     <div class="container mt-5 mb-5">
         <h2>
-            <i class="fa-solid fa-check-double"></i>
+            <i class="fa-solid fa-bolt-lightning"></i>
             結帳成功
         </h2>
 
@@ -70,23 +106,17 @@
                     <label>@Model[key]</label>
                 </div>
             }
-           
+
         }
-        <div class="mt-3">
+        <div class="note">
             <p>
                 商品將於3-5個工作天內寄出,本公司不會主動電話聯繫操作轉帳事宜,如有冒稱本公司名稱皆為詐騙集團。
             </p>
         </div>
         <div class="mb-3 mt-3 d-flex justify-content-center align-items-center mx-auto">
-            <button type="button" class="btn btn-outline-danger btn-cancel btn_cancel  me-2" id="btn_edit" onclick="window.location.href='@Url.Action("Index", "Home")'">回首頁</button>
+            <button type="button" class="btn btn-outline-secondary btn-cancel btn_cancel me-2" id="btn_edit" onclick="window.location.href='@Url.Action("Index", "Home")'">回首頁</button>
         </div>
 
     </div>
 </div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
 

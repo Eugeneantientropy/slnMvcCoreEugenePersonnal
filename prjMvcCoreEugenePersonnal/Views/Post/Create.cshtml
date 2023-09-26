@@ -1,0 +1,117 @@
+﻿@model prjMvcCoreEugenePersonnal.ViewModels.CPostCreateViewModel
+
+@{
+    ViewData["Title"] = "新增文章";
+}
+
+@if (ViewBag.Errors != null)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewBag.Errors)
+        {
+            <p>@error</p>
+        }
+    </div>
+}
+
+<div class="content container">
+    <div class="activityAdd">
+        <div class="active_info">
+            <h2>新增文章</h2>
+        </div>
+        <div class="form">
+            <form method="post" enctype="multipart/form-data">
+                <div class="infos">
+                    <div id="contestPeople"></div>
+                    <div class="info">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="Title">文章標題：</label>
+                            <input asp-for="Title" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="DatePosted">時間：</label>
+                            <input asp-for="DatePosted" type="datetime-local" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" for="ImageFile">圖片上傳:</label>
+                            <input type="file" name="ImageFile" id="ImageFile" class="form-control" />
+                            <input type="hidden" asp-for="PostImageUrl" />
+                        </div>
+                    </div>
+                </div>
+                <div class="text d-flex align-items-center">
+                    <input id="AI" class="form-control flex-grow-1 align-middle me-2" placeholder="請輸入靈感關鍵字&需要語言" />
+                    <button id="getSuggestionButton" type="button" class="btn btn-primary align-middle" style="height: 38px; width: 120px !important;">AI靈感生成</button>
+                </div>
+
+
+
+
+                <div class="text">
+                    <label for="Content">文章內容：</label>
+                    <textarea asp-for="Content" id="Content" class="form-control" rows="5"></textarea>
+                </div>
+                <input type="submit" value="新增" class="btn btn-info mt-3" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="suggestionModal" tabindex="-1" aria-labelledby="suggestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="suggestionModalLabel">靈感生成器(AI)</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="suggestionContent"></div>
+                <div class="form-group">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#getSuggestionButton").click(function () {
+        var content = $("#AI").val();
+        $.post("/Post/GetSuggestion", { content: content }, function (data) {
+            if (data.suggestion) {
+                $("#suggestionContent").html(data.suggestion);
+
+                $("#suggestionModal").modal("show");
+
+                $("#saveResponse").click(function () {
+                    var userResponse = $("#userResponse").val();
+                    if (userResponse) {
+                        $("#AI").val(content + "\n\n用户回复:\n" + userResponse);
+                    }
+                    $("#suggestionModal").modal("hide");
+                });
+            } else {
+                alert(data.error);
+            }
+        });
+    });
+</script>
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea#Content',
+        plugins: [
+            'code', 'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+            'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
+            'bullist numlist checklist outdent indent | removeformat | code table help',
+        images_upload_url: '/Editor/TinyMceUpload'
+    });
+</script>
