@@ -1,0 +1,184 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<div class="container mt-5 mb-5">
+
+    <div class="row">
+        <!-- 左侧按钮 -->
+        <div class="col-md-3">
+            <div class="btn-group-vertical mb-4" role="group">
+                <a asp-action="List" asp-controller="Order" class="btn btn-secondary mb-2">訂單管理</a>
+                <a asp-action="List" asp-controller="Product" class="btn btn-secondary mb-2">商品管理</a>
+                <a asp-action="List" asp-controller="PostManager" class="btn btn-secondary">文章管理</a>
+            </div>
+            <hr></hr>
+        </div>
+        <!-- 右侧圆饼图 -->
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>商品總類</h3>
+                    <canvas id="doughnutProduct" width="150" height="90" style="width:100%; height:auto;"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <h3>每月營業額</h3>
+                    <canvas id="barLine" width="200" height="110" style="width:100%; height:auto;"></canvas>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>每月未出貨訂單</h3>
+                    <canvas id="barChart" width="200" height="110" style="width:100%; height:auto;"></canvas>
+                </div>
+                <div class="col-md-6">
+                    <h3>每月新加入會員</h3>
+                    <canvas id="memberline" width="200" height="110" style="width:100%; height:auto;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script typeof="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Dashboard/ProductClassification",
+            data: "",
+            contextType: "application/json; charset=utf8",
+            dataType: "json",
+            success: OnSuccess,
+        });
+
+        function OnSuccess(data) {
+            const barChart = document.getElementById("doughnutProduct");
+            var _data = data;
+            var _labels = _data[0];
+            var _CharData = _data[1];
+            var colors = ['#0EEBD3', "#49D3F5", "#3287DB", "#2952F5", "#6454EB", "Navy"];
+
+            new Chart(barChart,
+                {
+                    type: 'pie',
+                    data: {
+                        labels: _labels,
+                        datasets: [{
+                            label: "商品總類",
+                            backgroundColor: colors,
+                            data: _CharData,
+                            borderWidth: 1,
+
+                        }]
+                    },
+
+
+                });
+        }
+    });
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Dashboard/NewMember",
+            data: "",
+            contextType: "application/json; charset=utf8",
+            dataType: "json",
+            success: OnSuccess,
+        });
+
+        function OnSuccess(data) {
+            const barChart = document.getElementById("memberline");
+            var _data = data;
+            var _labels = _data[0];
+            var _CharData = _data[1];
+            var colors = ['Purple'];
+
+            new Chart(barChart,
+                {
+                    type: 'line',
+                    data: {
+                        labels: _labels,
+                        datasets: [{
+                            label: "新加入會員",
+                            backgroundColor: colors,
+                            data: _CharData,
+                            borderWidth: 1,
+
+                        }]
+                    },
+    
+
+                });
+        }
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/Dashboard/unShiped",
+            data: "",
+            contextType: "application/json; charset=utf8",
+            dataType: "json",
+            success: OnSuccess,
+        });
+
+        function OnSuccess(data) {
+            const barChart = document.getElementById("barChart");
+            var _data = data;
+            var _labels = _data[0];
+            var _CharData = _data[1];
+            var colors = ['LightGreen'];
+
+            new Chart(barChart,
+                {
+                    type: 'bar',
+                    data: {
+                        labels: _labels,
+                        datasets: [{
+                            label:"訂單未出貨數量",
+                            backgroundColor: colors,
+                            data: _CharData,
+                            borderWidth: 1,
+
+                        }]
+                    }
+                });
+        }
+    });
+    $(document).ready(function(){
+        $.ajax({
+            type:"POST",
+            url: "/Dashboard/GetOrder",
+            data:"",
+            contextType:"application/json; charset=utf8",
+            dataType:"json",
+            success:OnSuccess,
+        });
+
+            function OnSuccess(data){
+            const barChart = document.getElementById("barLine");
+                var _data = data;
+                var _labels = _data[0];
+                var _CharData = _data[1];
+                var colors = ['Navy'];
+
+                new Chart(barChart,
+                {
+                    type: 'line',
+                    data:{
+                        labels:_labels,
+                        datasets:[{
+                            label:"營業額",
+                            backgroundColor: colors,
+                            data: _CharData,
+                            borderWidth:1,
+
+                        }]
+                    }
+                });
+            }
+    }); 
+</script>

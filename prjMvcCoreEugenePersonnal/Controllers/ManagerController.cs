@@ -17,7 +17,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
                 context.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {
                     controller = "Home",
-                    action = "Login"
+                    action = "EmployeeLogin"
                 }));
             }
         }

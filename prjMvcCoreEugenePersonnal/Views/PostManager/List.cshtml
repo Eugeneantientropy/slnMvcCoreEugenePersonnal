@@ -1,0 +1,155 @@
+﻿@model IEnumerable<prjMvcCoreEugenePersonnal.Models.Post>
+
+@{
+    ViewData["Title"] = "文章列表";
+}
+
+<style>
+    th, td {
+        cursor: pointer;
+        height: 50px; /* 添加固定高度 */
+        vertical-align: middle; /* 確保文本在垂直方向上置中 */
+        text-align: center; /* 水平置中文本 */
+    }
+
+        th.focus {
+            background-color: #f9f9f9;
+        }
+
+        th.selected {
+            background-color: #d9d9d9;
+        }
+
+    /* 將整個內容區塊置中 */
+    .content-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+</style>
+
+<div class="container mt-3">
+    <h1 class="mb-3">文章列表</h1>
+
+    <div class="content-center">
+        @using (Html.BeginForm("List", "PostManager", FormMethod.Get, new { @class = "form-inline my-2 my-lg-0 mb-3" }))
+        {
+            <div class="input-group">
+                @Html.TextBox("txtKeyWord", null, new { @class = "form-control", @placeholder = "請輸入關鍵字" })
+                <div class="input-group-append">
+                    <input type="submit" value="查詢" class="btn btn-primary" />
+                </div>
+            </div>
+        }
+
+        <div class="mb-3 mt-3">
+            <a asp-action="Create" asp-controller="Post" class="btn btn-success">新增文章</a>
+        </div>
+
+        <table class="table table-bordered table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        文章編號
+                    </th>
+                    <th>
+                        發文者編號
+                    </th>
+                    <th>
+                        標題
+                    </th>
+                    <th>
+                        內容
+                    </th>
+                    <th>
+                        發文日期
+                    </th>
+                    <th>
+                        最後修改
+                    </th>
+                    <th>
+                        文章照片
+                    </th>
+                    <th>修改/刪除</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PostId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserId)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Content)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DatePosted)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.LastEdited)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PostImageUrl)
+                            </td>
+                            <td>
+                                @Html.ActionLink("修改", "Edit", new { id = item.PostId }, new { @class = "btn btn-success btn-sm" })
+                                @Html.ActionLink("刪除", "Delete", "PostManager", new { id = item.PostId }, new { @class = "btn btn-danger btn-sm", onclick = "return confirm('確定要刪除嗎?')" })
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('th').each(function (col) {
+            $(this).hover(
+                function () {
+                    $(this).addClass('focus');
+                },
+                function () {
+                    $(this).removeClass('focus');
+                }
+            );
+            $(this).click(function () {
+                if ($(this).is('.asc')) {
+                    $(this).removeClass('asc');
+                    $(this).addClass('desc selected');
+                    sortOrder = -1;
+                }
+                else {
+                    $(this).addClass('asc selected');
+                    $(this).removeClass('desc');
+                    sortOrder = 1;
+                }
+                $(this).siblings().removeClass('asc selected');
+                $(this).siblings().removeClass('desc selected');
+                var arrData = $('table').find('tbody >tr:has(td)').get();
+                arrData.sort(function (a, b) {
+                    var val1 = $(a).children('td').eq(col).text().toUpperCase();
+                    var val2 = $(b).children('td').eq(col).text().toUpperCase();
+                    if ($.isNumeric(val1) && $.isNumeric(val2))
+                        return sortOrder == 1 ? val1 - val2 : val2 - val1;
+                    else
+                        return (val1 < val2) ? -sortOrder : (val1 > val2) ? sortOrder : 0;
+                });
+                $.each(arrData, function (index, row) {
+                    $('tbody').append(row);
+                });
+            });
+        });
+    });
+</script>

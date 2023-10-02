@@ -23,7 +23,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Posts.OrderByDescending(p=>p.DatePosted).Take(6).ToListAsync());
+            return View(await _context.Posts.OrderByDescending(p=>p.DatePosted).Take(12).ToListAsync());
         }
         public IActionResult Create()
         {

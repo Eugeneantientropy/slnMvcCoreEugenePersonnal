@@ -4,6 +4,34 @@
     ViewData["Title"] = "UserInfoEdit";
 }
 
+<style>
+    .form-control:focus {
+        border-color: navy;
+        box-shadow: 0 0 0 0.2rem rgba(134, 194, 50, 0.25);
+    }
+
+    .form-control:hover {
+        border-color: navy;
+    }
+
+    .btn:hover {
+        transform: scale(1.05);
+    }
+
+    .table tbody tr:hover {
+        background-color: #f0f0f0;
+    }
+
+    .w-45 {
+        width: 45%;
+    }
+
+    /* 新增样式，隐藏连接的用户的 ID */
+    .hidden {
+        display: none;
+    }
+</style>
+
 <div class="container mt-5">
     <div class="row mb-5">
         <div class="col-md-6">
@@ -56,7 +84,6 @@
                             <th>購買數量</th>
                             <th>商品價格</th>
                             <th>出貨狀態</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -68,7 +95,6 @@
                                 <td>@item.Quantity</td>
                                 <td>@item.Price</td>
                                 <td>@item.OrderStatus</td>
-
                             </tr>
                         }
                     </tbody>
@@ -82,25 +108,4 @@
     </div>
 </div>
 
-<style>
-    .form-control:focus {
-        border-color: navy;
-        box-shadow: 0 0 0 0.2rem rgba(134, 194, 50, 0.25);
-    }
 
-    .form-control:hover {
-        border-color: navy;
-    }
-
-    .btn:hover {
-        transform: scale(1.05);
-    }
-
-    .table tbody tr:hover {
-        background-color: #f0f0f0;
-    }
-
-    .w-45 {
-        width: 45%;
-    }
-</style>

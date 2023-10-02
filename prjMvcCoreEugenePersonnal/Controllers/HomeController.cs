@@ -158,7 +158,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             TempData["message"] = JsonSerializer.Serialize<CAlertMessage>(resulta);
             CLogginUsercs.LoggedUser = "";
 
-            return RedirectToAction("EmployeeLogin", "Home");
+            return RedirectToAction("Login", "Home");
         }
         public IActionResult About() { return View(); }
 
@@ -172,39 +172,40 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             if (id == null)
                 return RedirectToAction("Index", "Home");
 
-            EugenePower0916Context db = new EugenePower0916Context();
-            User u = db.Users.FirstOrDefault(u => u.UserId == id);
-
-            //var orderItems = (from order in db.Orders
-            //                  join orderItem in db.OrderItems on order.OrderId equals orderItem.OrderId
-            //                  where order.UserId == u.UserId
-            //                  select orderItem).ToList();
-            var orderDetails = from order in db.Orders
-                               where order.UserId == u.UserId
-                               join orderItem in db.OrderItems on order.OrderId equals orderItem.OrderId
-                               join product in db.Products on orderItem.ProductId equals product.ProductId
-                               select new
-                               {
-                                   order.OrderId,
-                                   order.OrderStatus,
-                                   orderItem.Quantity,
-                                   product.ProductName,
-                                   product.Price
-                               };
-
-
-
-            if (orderDetails.Any())
+            using (var db = new EugenePower0916Context())
             {
-                ViewBag.OrderItems = orderDetails;
-            }
-            else
-            {
-                ViewBag.OrderItems = new List<OrderItem>(); // Set it to an empty list instead of null to avoid NullReferenceException
-            }
+                User u = db.Users.FirstOrDefault(u => u.UserId == id);
 
-            return View(u);
+                string currentUsername = User.Identity.Name;
+
+                ViewBag.CurrentUsername = currentUsername; // 将用户名传递到视图
+
+                var orderDetails = from order in db.Orders
+                                   where order.UserId == u.UserId
+                                   join orderItem in db.OrderItems on order.OrderId equals orderItem.OrderId
+                                   join product in db.Products on orderItem.ProductId equals product.ProductId
+                                   select new
+                                   {
+                                       order.OrderId,
+                                       order.OrderStatus,
+                                       orderItem.Quantity,
+                                       product.ProductName,
+                                       product.Price
+                                   };
+
+                if (orderDetails.Any())
+                {
+                    ViewBag.OrderDetails = orderDetails.ToList();
+                }
+                else
+                {
+                    ViewBag.OrderDetails = new List<OrderItem>();
+                }
+
+                return View(u);
+            }
         }
+
 
         [HttpPost]
         public IActionResult UserInfoEdit(User user)
@@ -264,6 +265,9 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             //返回包含更新后的用户信息的视图
             return View(user);
         }
-
+        public IActionResult Chat()
+        {
+            return View();
+        }
     }
 }

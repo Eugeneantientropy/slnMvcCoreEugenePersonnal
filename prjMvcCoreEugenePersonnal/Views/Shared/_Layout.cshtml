@@ -76,21 +76,22 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        會員中心
+                        使用者
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         @if (CLogginUsercs.LoggedUser != "")
                         {
                             if(CLogginUsercs.LoggedUser == "employee")
                             {
-                                <li><a class="dropdown-item" href=@Url.Action("Create", "Post")>文章管理</a></li>
+                                <li><a class="dropdown-item" href=@Url.Action("List", "PostManager")>文章管理</a></li>
                                 <li><a class="dropdown-item" href=@Url.Action("List", "Product")>商品管理</a></li>
                                 <li><a class="dropdown-item" href=@Url.Action("List", "Order")>訂單管理</a></li>
                                 <li><a class="dropdown-item" href=@Url.Action("logout", "Home")>管理員登出</a></li>
-                                <li><a class="dropdown-item" href=@Url.Action("UserInfoEdit", "User", new { id = CLogginUsercs.LoggenUserId})>後臺管理</a></li>
+                        <li><a class="dropdown-item" href=@Url.Action("Index", "Dashboard")>後臺管理</a></li>
                             }
                             else
                             {
+                                <li><a class="dropdown-item" href=@Url.Action("Chat", "Home")>站內聊天室</a></li>
                                 <li><a class="dropdown-item" href=@Url.Action("logout", "Home")>登出</a></li>
                                 <li><a class="dropdown-item" href=@Url.Action("UserInfoEdit", "Home", new { id = CLogginUsercs.LoggenUserId})>會員資料</a></li>
                             }

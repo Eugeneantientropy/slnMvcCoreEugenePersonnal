@@ -104,7 +104,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             o.UserId = vm.UserID;
             o.DateOrdered = currentTime;
             o.ShippingAddress = vm.Address;
-            o.OrderStatus = "未出貨";
+            o.OrderStatus = "unshipped";
             o.EcpayId = ecpayId;
 
             db.Orders.Add(o);

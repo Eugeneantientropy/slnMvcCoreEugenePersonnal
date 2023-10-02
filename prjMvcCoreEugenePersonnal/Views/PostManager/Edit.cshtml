@@ -1,0 +1,76 @@
+﻿@model prjMvcCoreEugenePersonnal.Models.CPostWrap
+
+@{
+    ViewData["Title"] = "修改文章";
+}
+
+<div class="container mt-3">
+    <h1 class="text-center">修改文章</h1>
+    <hr />
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="PostId" class="control-label">文章 ID</label>
+                    <input asp-for="PostId" class="form-control" readonly />
+                    <span asp-validation-for="PostId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label">使用者 ID</label>
+                    <input asp-for="UserId" class="form-control" readonly />
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Title" class="control-label">標題</label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Content" class="control-label">內容</label>
+                    <textarea asp-for="Content" id="Content" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DatePosted" class="control-label">發布日期</label>
+                    <input asp-for="DatePosted" class="form-control" readonly />
+                    <span asp-validation-for="DatePosted" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastEdited" class="control-label">最近修改時間</label>
+                    <input asp-for="LastEdited" class="form-control" readonly />
+                    <span asp-validation-for="LastEdited" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PostImageUrl" class="control-label">文章圖片</label>
+                    <input type="file" name="Photo" id="Photo" class="form-control" />
+                    <input type="hidden" asp-for="PostImageUrl" />
+                    <span asp-validation-for="PostImageUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    <input type="submit" value="儲存" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="text-center mt-3">
+        <a asp-action="List" asp-controller="PostManager" class="btn btn-secondary">返回</a>
+    </div>
+</div>
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    tinymce.init({
+        selector: 'textarea#Content',
+        plugins: [
+            'code', 'a11ychecker', 'advlist', 'advcode', 'advtable', 'autolink', 'checklist', 'export',
+            'lists', 'link', 'image', 'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+            'powerpaste', 'fullscreen', 'formatpainter', 'insertdatetime', 'media', 'table', 'help', 'wordcount'
+        ],
+        toolbar: 'undo redo | a11ycheck casechange blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify |' +
+            'bullist numlist checklist outdent indent | removeformat | code table help',
+        images_upload_url: '/Editor/TinyMceUpload'
+    });
+</script>
