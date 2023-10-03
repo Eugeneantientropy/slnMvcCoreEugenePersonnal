@@ -33,8 +33,11 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             //放訂單所有商品
             string orderProducts = "";
 
-            //放本站網址,訂單編號,價錢,商品名稱
-            var website = $"https://c528-140-116-180-210.ngrok-free.app";
+        //放本站網址,訂單編號,價錢,商品名稱
+        
+            var website = $"https://eugeneantientropy.azurewebsites.net";
+
+            //var website = $"https://c528-140-116-180-210.ngrok-free.app";
             //var website = $"https://localhost:7079";
             var orderId = id;
             var orderPrice = (int)order.TotalPrice;

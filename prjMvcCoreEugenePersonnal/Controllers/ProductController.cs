@@ -38,7 +38,7 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             // 找到所有引用该Product的ProductPhoto实体
             var productPhotos = db.ProductPhotos.Where(pp => pp.ProductId == id);
 
-            // 删除所有找到的ProductPhoto实体
+            // 删除所有找到的ProductPhoto
             db.ProductPhotos.RemoveRange(productPhotos);
 
             // 删除Product实体
@@ -150,7 +150,6 @@ namespace prjMvcCoreEugenePersonnal.Controllers
                     db.ProductPhotos.Add(proimg);
                 }
             }
-            // 在添加了所有的ProductPhoto后保存更改
             db.SaveChanges();
             return RedirectToAction("List");
         }

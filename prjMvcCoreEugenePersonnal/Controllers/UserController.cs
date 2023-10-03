@@ -237,14 +237,13 @@ namespace prjMvcCoreEugenePersonnal.Controllers
             }
             else
             {
-                string randomPassword = RandomPasswordGenerator.GeneratePassword(12); // 生成12个字符的密码
-                //Console.WriteLine(randomPassword);
+                string randomPassword = RandomPasswordGenerator.GeneratePassword(12); // 生成12個密码
                 CAlertMessage resulta = new CAlertMessage(CDictionary.Success, "重製密碼成功");
                 TempData["message"] = JsonSerializer.Serialize<CAlertMessage>(resulta);
 
                 // 寄送郵件
-                //_emailService.SendEmail(目標信箱, "信件標題", $"您的新密碼是：{randomPassword}");
-                _emailService.SendEmail(userEmail, "Flash Bean 會員您好", $"您的新密碼是：{randomPassword}");
+               
+                _emailService.SendEmail(userEmail, "尊貴的Flash Bean 會員您好", $"這裡是Flash Bean，您的新密碼是：{randomPassword}");
 
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(randomPassword);
                 db.SaveChanges();
