@@ -1,25 +1,39 @@
 # slnMvcCoreEugenePersonnal
+
 https://portaly.cc/eugeneantientropy  //個人履歷網站(包含圖文版作品介紹)
+
 Flash Bean 咖啡豆店商網站
+
 個人作品是以ASP.NET CORE 的MVC框架撰寫的咖啡豆電商網站。
 
 主要功能有商城系統、會員系統、發文系統、後臺管理系統，儀錶板系統，站內聊天室，並串接綠界金流API、Open AI API及Google SMTP寄信等外部服務。
+
 並使用Azure雲端部屬網站及SQL資料庫。
 
 以下為各大項系統功能簡介:
+
 1.首頁
+
 2.文章系統
+
 3.會員系統
+
 4.商城系統
+
 5.後臺儀錶板管理系統
+
 6.站內聊天室
+
 7.Azure雲端部屬
+
 8.資料庫
+
 https://eugeneantientropy.azurewebsites.net/ //作品實體網站
 
 
 
 首頁
+
 • 使用Html/Css，Boostrap等技術實做，並使用RWD響應式網頁風格。
 
 • 上方Header導覽列放置網站各項功能。
@@ -31,6 +45,7 @@ https://eugeneantientropy.azurewebsites.net/ //作品實體網站
 • 下方Footer放置網站導覽列及版權免責聲明等。
 
 文章系統
+
 • 使用Html/Css，Boostrap等技術排版實做前端網頁，並使用RWD響應式網頁風格。
 
 • 使用Entity FrameWork 將資料庫文章撈出並於前端。
